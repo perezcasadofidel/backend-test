@@ -6,7 +6,7 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from app.api.deps import get_current_session, get_db, get_innovasoft_client, get_settings
 from app.core.config import Settings
-from app.schemas.auth import LoginRequest, LoginResponse, LogoutResponse
+from app.schemas.auth import LoginRequest, LoginResponse, LogoutResponse, RegisterRequest, RegisterResponse
 from app.services.innovasoft_client import InnovasoftClient
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -97,6 +97,24 @@ async def login(
         token=token,
         userid=userid,
         username=username,
+        upstream_response=upstream.data,
+    )
+
+
+@router.post("/register", response_model=RegisterResponse, status_code=status.HTTP_201_CREATED)
+async def register(
+    payload: RegisterRequest,
+    innovasoft: InnovasoftClient = Depends(get_innovasoft_client),
+) -> RegisterResponse:
+    upstream = await innovasoft.register(payload.model_dump())
+    if upstream.status_code >= 400:
+        raise HTTPException(
+            status_code=upstream.status_code,
+            detail={"message": "Registro rechazado por Innovasoft", "upstream": upstream.data},
+        )
+
+    return RegisterResponse(
+        status_code=upstream.status_code,
         upstream_response=upstream.data,
     )
 

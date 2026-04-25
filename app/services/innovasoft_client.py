@@ -54,6 +54,9 @@ class InnovasoftClient:
     async def login(self, payload: dict[str, Any]) -> UpstreamResponse:
         return await self.request("POST", "/api/Authenticate/login", json=payload)
 
+    async def register(self, payload: dict[str, Any]) -> UpstreamResponse:
+        return await self.request("POST", "/api/Authenticate/register", json=payload)
+
     async def list_clients(self, payload: dict[str, Any], token: str | None = None) -> UpstreamResponse:
         return await self.request("POST", "/api/Cliente/Listado", json=payload, token=token)
 

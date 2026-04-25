@@ -1,6 +1,6 @@
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class LoginRequest(BaseModel):
@@ -12,6 +12,15 @@ class LoginResponse(BaseModel):
     token: str
     userid: str | None = None
     username: str
+    upstream_response: Any
+
+
+class RegisterRequest(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
+
+class RegisterResponse(BaseModel):
+    status_code: int
     upstream_response: Any
 
 

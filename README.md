@@ -36,6 +36,7 @@ Prefijo base: `/api/local`
 
 - `GET /health`
 - `POST /auth/login`
+- `POST /auth/register`
 - `POST /auth/logout`
 - `POST /clientes/listado`
 - `GET /clientes/{cliente_id}`
